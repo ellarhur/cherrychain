@@ -1,15 +1,30 @@
-import AppError from '../middleware/appError.mjs';
 import mongoose from 'mongoose';
+import AppError from '../middleware/appError.mjs';
+import dotenv from 'dotenv';
+dotenv.config();
 
-export const connectDb = async () => {
+console.log(process.env.JWT_SECRET); // Använd JWT-hemlighet
+console.log(process.env.MONGO_URI);  // Koppla till databasen
+
+
+const connectDb = async () => {
+  const uri = process.env.MONGO_URI;
+
+  if (!uri) {
+    throw new AppError('MONGO_URI saknas i miljövariablerna.', 500);
+  }
+
   try {
-    console.log(process.env.MONGO_URI);
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-    if (conn) {
-      console.log(`Databasen är startad på: ${conn.connection.host}`);
-    }
-  } catch (error) {
-    throw new AppError(error.message, 500);
+    console.log('🟢 Ansluten till MongoDB');
+  } catch (err) {
+    console.error('🔴 MongoDB-anslutning misslyckades:', err);
+    throw new AppError('Kunde inte ansluta till databasen', 500);
   }
 };
+
+export default connectDb;

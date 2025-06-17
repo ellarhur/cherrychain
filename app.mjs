@@ -2,8 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import connectDB from './db/magnolia.mjs';
-import authRoutes from './routes/auth-routes.mjs';
+import connectDb from './src/db/cherrydatabase.mjs';
+import authRoutes from './src/routes/authRoutes.mjs';
 import cors from 'cors';
 
 const filename = fileURLToPath(import.meta.url);
@@ -19,7 +19,7 @@ console.log('Miljövariabler efter dotenv.config():', {
   MONGO_URI: process.env.MONGO_URI ? 'Definierad' : 'Ej definierad'
 });
 
-await connectDB();
+await connectDb();
 
 const app = express();
 

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { catchErrorAsync } from '../middleware/catchErrorAsync.mjs';
 import AppError from '../middleware/appError.mjs';
-import UserRepository from '../repositories/usersRepositories.mjs';
+import UserRepository from '../repositories/userRepository.mjs';
 
 export const loginUser = catchErrorAsync(async (req, res, next) => {
   const { email, password } = req.body;
