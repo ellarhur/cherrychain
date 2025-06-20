@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magnolia Blockchain</title>
+  <script src="./js/blockchain.mjs" type="module" defer></script>
+  <link rel="stylesheet" href="./css/app.css" />
+</head>
+
+<body>
+  <nav>
+    <a href="miner.html">⛏️ Mine block</a>
+    <a href="index.html" onclick="localStorage.clear()">🚪 Logga ut</a>
+  </nav>
+
+  <main>
+    <h1>Blockkedjan</h1>
+    <div>
+      <input type="text" id="searchInput" placeholder="Sök blockhash...">
+      <button id="searchBtn">Sök</button>
+    </div>
+
+    <section id="blocks"></section>
+    <h2>Alla transaktioner</h2>
+    <section id="transactions"></section>
+  </main>
+</body>
+</html>

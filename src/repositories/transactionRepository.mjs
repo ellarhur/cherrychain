@@ -1,4 +1,4 @@
-import transactionModel from '../models/Transaction.mjs';
+import Transaction from '../models/Transaction.mjs';
 
 export default class TransactionRepository {
   async add(transaction) {
@@ -8,14 +8,14 @@ export default class TransactionRepository {
       outputs: transaction.outputs,
     };
 
-    return await Transactions.create(transactionData);
+    return await Transaction.create(transactionData);
   }
 
   async list() {
-    return await Transactions.find();
+    return await Transaction.find();
   }
 
   async findById(id) {
-    return await Transactions.findOne({ id });
+    return await Transaction.findOne({ id });
   }
 }

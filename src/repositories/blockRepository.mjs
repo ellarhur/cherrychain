@@ -11,11 +11,11 @@ export default class BlockRepository {
       difficulty: block.difficulty,
     };
 
-    return await blockModel.create(blockData);
+    return await Block.create(blockData);
   }
 
   async list() {
-    return await blockModel.find();
+    return await Block.find();
   }
 
   async findByHash(hash) {
@@ -23,8 +23,8 @@ export default class BlockRepository {
   }
 
   async replaceChain(newChain) {
-    await blockModel.deleteMany({});
-    await blockModel.insertMany(newChain.map(block => ({
+    await Block.deleteMany({});
+    await Block.insertMany(newChain.map(block => ({
       timestamp: block.timestamp,
       hash: block.hash,
       lastHash: block.lastHash,

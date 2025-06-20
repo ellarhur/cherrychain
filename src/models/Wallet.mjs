@@ -1,5 +1,5 @@
 import { INITIAL_BALANCE } from '../../utilities/config.mjs';
-import { keyMgr } from '../../utilities/keyManager.mjs';
+import { keyMgr } from '../../utilities/verify.mjs';
 import { createHash } from '../../utilities/hash.mjs';
 import Transaction from './Transaction.mjs';
 

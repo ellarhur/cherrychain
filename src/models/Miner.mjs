@@ -1,4 +1,4 @@
-import Transaction from '../wallet/Transaction.mjs';
+import Transaction from './Transaction.mjs';
 
 export default class Miner {
   constructor({ transactionPool, wallet, blockchain, server }) {

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magnolia Blockchain - Mine & Transact</title>
+  <link rel="stylesheet" href="./css/app.css" />
+</head>
+<body>
+  <nav>
+    <a href="index.html" onclick="localStorage.clear()">🚪 Logga ut</a>
+    <a href="blockchain.html">🔗 Visa Blockkedjan</a>
+  </nav>
+
+  <main>
+    <h1>Skapa ny transaktion</h1>
+
+    <form id="transactionForm">
+      <label>
+        Mottagarens adress:
+        <input type="text" id="recipient" required placeholder="Recipient address" />
+      </label>
+      <br />
+      <label>
+        Belopp:
+        <input type="number" id="amount" required placeholder="Amount" min="1" />
+      </label>
+      <br />
+      <button type="submit">Skicka transaktion</button>
+    </form>
+
+    <hr />
+
+    <h2>Minea block</h2>
+    <button id="mineBlockBtn">Minea block</button>
+
+    <div id="message"></div>
+  </main>
+
+  <script type="module">
+    const form = document.getElementById('transactionForm');
+    const recipientInput = document.getElementById('recipient');
+    const amountInput = document.getElementById('amount');
+    const mineBtn = document.getElementById('mineBlockBtn');
+    const messageDiv = document.getElementById('message');
+
+    const API_URL = 'http://localhost:5050';  // din backend URL och port
+
+    // Funktion för att skapa en transaktion
+    const createTransaction = async (sender, recipient, amount) => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        messageDiv.textContent = 'Du måste vara inloggad för att skapa transaktioner.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/transactions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ sender, recipient, amount }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          messageDiv.textContent = 'Transaktion skapad!';
+        } else {
+          messageDiv.textContent = `Fel: ${data.message || 'Något gick fel'}`;
+        }
+      } catch (error) {
+        messageDiv.textContent = 'Nätverksfel, försök igen senare.';
+      }
+    };
+
+    // Funktion för att minea block
+    const mineBlock = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        messageDiv.textContent = 'Du måste vara inloggad för att minea block.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/blocks/mine`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          messageDiv.textContent = 'Block mined!';
+        } else {
+          messageDiv.textContent = `Fel: ${data.message || 'Något gick fel'}`;
+        }
+      } catch (error) {
+        messageDiv.textContent = 'Nätverksfel, försök igen senare.';
+      }
+    };
+
+    // Event listener för formuläret
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const recipient = recipientInput.value.trim();
+      const amount = parseInt(amountInput.value, 10);
+      const sender = 'din-adress-har'; // OBS! Byt till din wallets adress, eller hämta från användarens profil/token
+
+      if (!recipient || isNaN(amount) || amount <= 0) {
+        messageDiv.textContent = 'Fyll i giltig mottagare och belopp.';
+        return;
+      }
+
+      createTransaction(sender, recipient, amount);
+
+      recipientInput.value = '';
+      amountInput.value = '';
+    });
+
+    // Event listener för mine-knappen
+    mineBtn.addEventListener('click', mineBlock);
+  </script>
+</body>
+</html>

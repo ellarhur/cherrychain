@@ -1,18 +1,18 @@
-import userModel from '../models/User.mjs';
+import User from '../models/User.mjs';
 
 export default class UserRepository {
   async add(user) {
     const { firstName, lastName, email, password } = user;
-    return await userModel.create({ firstName, lastName, email, password });
+    return await User.create({ firstName, lastName, email, password });
   }
 
   async find(email, login) {
     return login === true
-      ? await userModel.findOne({ email: email }).select('+password')
-      : await userModel.findOne({ email: email });
+      ? await User.findOne({ email: email }).select('+password')
+      : await User.findOne({ email: email });
   }
 
   async list() {
-    return await userModel.find();
+    return await User.find();
   }
 }
